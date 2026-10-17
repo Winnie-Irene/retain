@@ -1,9 +1,11 @@
 import { createApp } from "./app.js";
 import { connectDatabase } from "./config/db.js";
 import { env } from "./config/env.js";
+import { ensureDefaultCategory } from "./services/categoryService.js";
 
 async function start() {
   await connectDatabase();
+  await ensureDefaultCategory();
 
   const app = createApp();
   app.listen(env.PORT, () => {
