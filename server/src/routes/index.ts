@@ -4,6 +4,7 @@ import { expenseRouter } from "./expenseRoutes.js";
 import { budgetRouter } from "./budgetRoutes.js";
 import { categoryRouter } from "./categoryRoutes.js";
 import { dashboardRouter } from "./dashboardRoutes.js";
+import { adminRouter } from "./adminRoutes.js";
 
 export const apiRouter = Router();
 
@@ -16,3 +17,4 @@ apiRouter.use("/expenses", expenseRouter);
 apiRouter.use("/budgets", budgetRouter);
 apiRouter.use("/categories", categoryRouter);
 apiRouter.use("/dashboard", dashboardRouter);
+apiRouter.use("/admin", adminRouter);
