@@ -1,0 +1,131 @@
+.is-negative {
+  color: var(--danger);
+}
+
+.is-refreshing {
+  opacity: 0.6;
+  transition: opacity 0.2s var(--ease);
+}
+
+.sheet__notice {
+  padding: var(--space-4) var(--space-5);
+}
+
+.ledger__title span {
+  display: block;
+  font-weight: 500;
+}
+
+.ledger__title small {
+  display: block;
+  max-width: 38ch;
+  color: var(--ink-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ledger__date {
+  white-space: nowrap;
+  color: var(--ink-soft);
+}
+
+.ledger__amount {
+  font-weight: 500;
+}
+
+.ledger__actions-head {
+  width: 84px;
+}
+
+.ledger__actions {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.sheet--flush .ledger th:first-child,
+.sheet--flush .ledger td:first-child {
+  border-left: 0;
+}
+
+.sheet--flush .ledger th:last-child,
+.sheet--flush .ledger td:last-child {
+  border-right: 0;
+}
+
+.sheet--flush .ledger tr:last-child td {
+  border-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .ledger--expenses thead {
+    display: none;
+  }
+
+  .ledger--expenses,
+  .ledger--expenses tbody,
+  .ledger--expenses td {
+    display: block;
+    width: 100%;
+  }
+
+  .ledger--expenses tbody tr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .ledger--expenses tbody tr:nth-child(even) {
+    background: var(--blush-wash);
+  }
+
+  .ledger--expenses td {
+    border: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    text-align: left;
+  }
+
+  .ledger--expenses .ledger__date {
+    order: 0;
+    flex-basis: 100%;
+    font-size: var(--text-xs);
+  }
+
+  .ledger--expenses .ledger__title {
+    order: 1;
+    flex: 1 0 55%;
+    width: auto;
+    min-width: 0;
+  }
+
+  .ledger--expenses .ledger__amount {
+    order: 2;
+    width: auto;
+    text-align: right;
+  }
+
+  .ledger--expenses td[data-label="Category"],
+  .ledger--expenses td[data-label="Paid with"] {
+    display: inline-flex;
+    width: auto;
+    font-size: var(--text-xs);
+  }
+
+  .ledger--expenses td[data-label="Category"] {
+    order: 3;
+  }
+
+  .ledger--expenses td[data-label="Paid with"] {
+    order: 4;
+  }
+
+  .ledger--expenses .ledger__actions {
+    order: 5;
+    width: auto;
+    margin-left: auto;
+  }
+}

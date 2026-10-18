@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./components/layout/AppLayout";
 import { AdminRoute, GuestRoute, ProtectedRoute } from "./routes/guards";
@@ -10,9 +11,20 @@ import { AdminInsightsPage } from "./pages/admin/AdminInsightsPage";
 import { AdminCategoriesPage } from "./pages/admin/AdminCategoriesPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { useAuth } from "./hooks/useAuth";
+import { useAppDispatch } from "./store";
+import { resetFilters } from "./store/filtersSlice";
+import { clearExpenses } from "./store/expensesSlice";
 
 export function App() {
   const { status, isAdmin } = useAuth();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (status === "guest") {
+      dispatch(resetFilters());
+      dispatch(clearExpenses());
+    }
+  }, [status, dispatch]);
 
   return (
     <Routes>
