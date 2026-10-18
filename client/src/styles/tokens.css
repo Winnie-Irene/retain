@@ -1,0 +1,56 @@
+:root {
+  --blush: #f4c7c3;
+  --blush-soft: #fbe8e5;
+  --blush-wash: #fdf4f2;
+  --blush-deep: #e39e98;
+  --blush-ink: #9e5a55;
+  --paper: #fffdfc;
+  --canvas: #fcf6f5;
+  --ink: #2e2626;
+  --ink-soft: #6e6262;
+  --ink-faint: #a39593;
+  --rule: #ecdad7;
+  --rule-strong: #dcc2be;
+  --sage: #8a9a7b;
+  --sage-soft: #e7ecdf;
+  --olive: #b8b27e;
+  --terracotta: #b5654a;
+  --slate: #6b7a89;
+  --amber: #c88b4a;
+  --amber-soft: #f7e8d6;
+  --danger: #b0473a;
+  --danger-soft: #f6dcd7;
+
+  --font-script: "Pinyon Script", "Snell Roundhand", cursive;
+  --font-sans: "Jost", "Avenir Next", "Segoe UI", sans-serif;
+
+  --text-xs: 0.78rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.375rem;
+  --text-xl: 1.75rem;
+  --text-2xl: 2.5rem;
+  --text-3xl: 3.5rem;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  --radius-cell: 3px;
+  --radius-control: 6px;
+  --radius-sheet: 10px;
+  --radius-pill: 999px;
+
+  --shadow-sheet: 0 1px 0 rgba(158, 90, 85, 0.06), 0 10px 30px -18px rgba(158, 90, 85, 0.35);
+  --shadow-float: 0 24px 60px -24px rgba(46, 38, 38, 0.35);
+
+  --sidebar-width: 264px;
+  --content-max: 1240px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
