@@ -17,6 +17,9 @@ export type ExpenseKind = (typeof EXPENSE_KINDS)[number];
 export const DEFAULT_CATEGORY_NAME = "Uncategorized";
 export const DEFAULT_CATEGORY_COLOR = "#B8A9A1";
 
+export const ACCOUNT_STATUSES = ["active", "suspended"] as const;
+export type AccountStatus = (typeof ACCOUNT_STATUSES)[number];
+
 export const DEFAULT_ALERT_PERCENT = 80;
 
 export const LANDING_PAGES = ["dashboard", "expenses", "budget", "savings"] as const;

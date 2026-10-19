@@ -7,11 +7,11 @@ import {
   removeContribution,
   updateGoal,
 } from "../controllers/savingsController.js";
-import { requireAuth } from "../middleware/auth.js";
+import { requireAuth, requireMember } from "../middleware/auth.js";
 
 export const savingsRouter = Router();
 
-savingsRouter.use(requireAuth);
+savingsRouter.use(requireAuth, requireMember);
 savingsRouter.get("/", listGoals);
 savingsRouter.post("/", createGoal);
 savingsRouter.patch("/:id", updateGoal);

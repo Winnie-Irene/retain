@@ -7,11 +7,11 @@ import {
   listPaymentMethods,
   updateExpense,
 } from "../controllers/expenseController.js";
-import { requireAuth } from "../middleware/auth.js";
+import { requireAuth, requireMember } from "../middleware/auth.js";
 
 export const expenseRouter = Router();
 
-expenseRouter.use(requireAuth);
+expenseRouter.use(requireAuth, requireMember);
 
 expenseRouter.get("/payment-methods", listPaymentMethods);
 expenseRouter.route("/").get(listExpenses).post(createExpense);

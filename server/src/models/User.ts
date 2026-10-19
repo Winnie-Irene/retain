@@ -1,6 +1,6 @@
 import { Schema, model, type HydratedDocument, type InferSchemaType } from "mongoose";
 import bcrypt from "bcryptjs";
-import { DEFAULT_ALERT_PERCENT, LANDING_PAGES, ROLES } from "../config/constants.js";
+import { ACCOUNT_STATUSES, DEFAULT_ALERT_PERCENT, LANDING_PAGES, ROLES } from "../config/constants.js";
 
 const userSchema = new Schema(
   {
@@ -8,6 +8,7 @@ const userSchema = new Schema(
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true, minlength: 8, select: false },
     role: { type: String, enum: ROLES, default: "user" },
+    status: { type: String, enum: ACCOUNT_STATUSES, default: "active" },
     currency: { type: String, default: "RWF", maxlength: 3 },
     avatar: { type: String, default: "", maxlength: 400_000 },
     preferences: {
@@ -35,6 +36,7 @@ export function toPublicUser(user: UserDocument) {
     name: user.name,
     email: user.email,
     role: user.role,
+    status: user.status ?? "active",
     currency: user.currency,
     avatar: user.avatar ?? "",
     preferences: {

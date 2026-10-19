@@ -32,6 +32,9 @@ export async function login(req: Request, res: Response) {
   if (!user || !(await passwordMatches(input.password, user.password))) {
     throw AppError.unauthorized("Email or password is incorrect");
   }
+  if (user.status === "suspended") {
+    throw AppError.forbidden("This account has been suspended. Please contact the Retain team.");
+  }
 
   const token = signToken({ sub: user._id.toString(), role: user.role });
   res.json({ token, user: toPublicUser(user) });
