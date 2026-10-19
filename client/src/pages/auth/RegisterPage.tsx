@@ -46,7 +46,7 @@ export function RegisterPage() {
     try {
       const user = await signUp({ name: form.name.trim(), email: form.email.trim(), password: form.password });
       toast.success(`Your planner is ready, ${user.name.split(" ")[0]}`);
-      navigate("/dashboard", { replace: true });
+      navigate("/budget", { replace: true, state: { firstVisit: true } });
     } catch (error) {
       if (error instanceof ApiError) setErrors(error.fieldErrors);
       setFormError(errorMessage(error));
