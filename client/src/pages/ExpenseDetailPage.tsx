@@ -57,6 +57,7 @@ export function ExpenseDetailPage() {
     { label: "Category", value: <CategoryTag category={expense.category} /> },
     { label: "Date", value: formatDate(expense.date, "long") },
     { label: "Payment method", value: PAYMENT_LABELS[expense.paymentMethod] },
+    {label: "Type", value: expense.kind === "fixed" ? "Fixed, the same every month" : "Variable, changes month to month", },
     { label: "Recorded", value: `${formatDate(expense.createdAt, "long")} (${timeAgo(expense.createdAt)})` },
     { label: "Last edited", value: timeAgo(expense.updatedAt) },
   ];

@@ -10,6 +10,7 @@ export const selectActiveFilterCount = createSelector(selectFilters, (filters) =
   if (filters.search.trim()) count += 1;
   count += filters.categories.length;
   count += filters.paymentMethods.length;
+  count += filters.kinds.length;
   if (filters.startDate || filters.endDate) count += 1;
   if (filters.minAmount || filters.maxAmount) count += 1;
   return count;

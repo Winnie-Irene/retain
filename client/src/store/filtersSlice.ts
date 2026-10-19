@@ -1,10 +1,11 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { PaymentMethod, SortField, SortOrder } from "../types/models";
+import type { ExpenseKind, PaymentMethod, SortField, SortOrder } from "../types/models";
 
 export interface FiltersState {
   search: string;
   categories: string[];
   paymentMethods: PaymentMethod[];
+  kinds: ExpenseKind[];
   startDate: string;
   endDate: string;
   minAmount: string;
@@ -19,6 +20,7 @@ export const initialFiltersState: FiltersState = {
   search: "",
   categories: [],
   paymentMethods: [],
+  kinds: [],
   startDate: "",
   endDate: "",
   minAmount: "",
@@ -51,6 +53,10 @@ const filtersSlice = createSlice({
     },
     togglePaymentMethod(state, action: PayloadAction<PaymentMethod>) {
       state.paymentMethods = toggle(state.paymentMethods, action.payload);
+      state.page = 1;
+    },
+    toggleKind(state, action: PayloadAction<ExpenseKind>) {
+      state.kinds = toggle(state.kinds, action.payload);
       state.page = 1;
     },
     setDateRange(state, action: PayloadAction<{ startDate: string; endDate: string }>) {
@@ -98,6 +104,7 @@ export const {
   toggleCategory,
   setCategories,
   togglePaymentMethod,
+  toggleKind,
   setDateRange,
   setAmountRange,
   setSort,

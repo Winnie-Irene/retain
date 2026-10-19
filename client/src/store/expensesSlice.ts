@@ -28,6 +28,7 @@ export function filtersToQuery(filters: FiltersState) {
     search: filters.search.trim(),
     categories: filters.categories,
     paymentMethods: filters.paymentMethods,
+    kinds: filters.kinds,
     startDate: filters.startDate,
     endDate: filters.endDate,
     minAmount: filters.minAmount,

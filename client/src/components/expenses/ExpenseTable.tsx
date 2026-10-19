@@ -93,7 +93,10 @@ export function ExpenseTable({
                 {formatDate(expense.date)}
               </td>
               <td data-label="Expense" className="ledger__title">
-                <span>{expense.title}</span>
+                <span>
+                  {expense.title}
+                  {expense.kind === "fixed" && <em className="kind-tag">Fixed</em>}
+                </span>
                 {!compact && expense.notes && <small>{expense.notes}</small>}
               </td>
               <td data-label="Category">

@@ -1,10 +1,15 @@
-import type { BudgetStatus, LandingPage, PaymentMethod, SortField, SortOrder } from "../types/models";
+import type { BudgetStatus, ExpenseKind, LandingPage, PaymentMethod, SortField, SortOrder } from "../types/models";
 
 export const PAYMENT_METHODS: { value: PaymentMethod; label: string }[] = [
   { value: "mobile_money", label: "Mobile Money" },
   { value: "card", label: "Card" },
   { value: "cash", label: "Cash" },
   { value: "bank_transfer", label: "Bank Transfer" },
+];
+
+export const EXPENSE_KINDS: { value: ExpenseKind; label: string; hint: string }[] = [
+  { value: "variable", label: "Variable", hint: "Changes month to month, like food or transport" },
+  { value: "fixed", label: "Fixed", hint: "Same every month, like rent or subscriptions" },
 ];
 
 export const PAYMENT_LABELS: Record<PaymentMethod, string> = {

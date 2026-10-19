@@ -6,9 +6,9 @@ import { SelectField, TextAreaField, TextField } from "../ui/Field";
 import { useCategories } from "../../hooks/useCategories";
 import { expenseApi } from "../../api/services";
 import { ApiError, errorMessage } from "../../api/client";
-import { PAYMENT_METHODS } from "../../utils/constants";
+import { EXPENSE_KINDS, PAYMENT_METHODS } from "../../utils/constants";
 import { fromInputDate, toInputDate, todayInputValue } from "../../utils/format";
-import type { Expense, ExpenseInput, PaymentMethod } from "../../types/models";
+import type { Expense, ExpenseInput, ExpenseKind, PaymentMethod } from "../../types/models";
 
 interface ExpenseFormModalProps {
   open: boolean;
@@ -24,11 +24,20 @@ interface FormState {
   date: string;
   paymentMethod: PaymentMethod | "";
   notes: string;
+  kind: ExpenseKind;
 }
 
 function initialState(expense?: Expense | null): FormState {
   if (!expense) {
-    return { title: "", amount: "", category: "", date: todayInputValue(), paymentMethod: "", notes: "" };
+    return {
+      title: "",
+      amount: "",
+      category: "",
+      date: todayInputValue(),
+      paymentMethod: "",
+      notes: "",
+      kind: "variable",
+    };
   }
   return {
     title: expense.title,
@@ -37,6 +46,7 @@ function initialState(expense?: Expense | null): FormState {
     date: toInputDate(expense.date),
     paymentMethod: expense.paymentMethod,
     notes: expense.notes,
+    kind: expense.kind ?? "variable",
   };
 }
 
@@ -85,6 +95,7 @@ function ExpenseForm({ expense, onClose, onSaved }: Omit<ExpenseFormModalProps, 
       date: fromInputDate(form.date),
       paymentMethod: form.paymentMethod,
       notes: form.notes.trim(),
+      kind: form.kind,
     };
 
     setSaving(true);
@@ -168,6 +179,24 @@ function ExpenseForm({ expense, onClose, onSaved }: Omit<ExpenseFormModalProps, 
             error={errors.paymentMethod}
           />
         </div>
+                <fieldset className="kind-field">
+          <legend className="field__label">Type</legend>
+          <div className="segmented" role="radiogroup" aria-label="Expense type">
+            {EXPENSE_KINDS.map((option) => (
+              <button
+                type="button"
+                key={option.value}
+                role="radio"
+                aria-checked={form.kind === option.value}
+                className={`segmented__option ${form.kind === option.value ? "is-active" : ""}`}
+                onClick={() => update("kind", option.value)}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+          <p className="field__message">{EXPENSE_KINDS.find((option) => option.value === form.kind)?.hint}</p>
+        </fieldset>
         <TextAreaField
           label="Notes"
           optional

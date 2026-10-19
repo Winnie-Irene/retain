@@ -1,4 +1,4 @@
-import type { BudgetSummary, Category, CategoryBreakdown, Expense, PaymentMethod, User } from "./models";
+import type { BudgetSummary, Category, CategoryBreakdown, Expense, ExpenseKind, PaymentMethod, User } from "./models";
 
 export interface AuthResponse {
   token: string;
@@ -42,6 +42,7 @@ export interface DashboardResponse {
   highestExpense: Expense | null;
   byCategory: CategoryBreakdown[];
   byPaymentMethod: PaymentMethodBreakdown[];
+  byKind: Record<ExpenseKind, { total: number; count: number }>;
   daily: DailyPoint[];
   recentExpenses: Expense[];
 }

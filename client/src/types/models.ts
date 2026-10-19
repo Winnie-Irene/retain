@@ -4,6 +4,8 @@ export type PaymentMethod = "cash" | "card" | "mobile_money" | "bank_transfer";
 
 export type BudgetStatus = "unset" | "within" | "approaching" | "over";
 
+export type ExpenseKind = "fixed" | "variable";
+
 export type SortField = "date" | "amount" | "title" | "createdAt";
 
 export type SortOrder = "asc" | "desc";
@@ -43,6 +45,7 @@ export interface Expense {
   date: string;
   paymentMethod: PaymentMethod;
   notes: string;
+  kind: ExpenseKind;
   createdAt: string;
   updatedAt: string;
 }
@@ -54,6 +57,7 @@ export interface ExpenseInput {
   date: string;
   paymentMethod: PaymentMethod;
   notes: string;
+  kind: ExpenseKind;
 }
 
 export interface BudgetSummary {
@@ -103,4 +107,12 @@ export interface SavingsSummary {
   completed: number;
   count: number;
   nextDeadline: { id: string; name: string; date: string | null } | null;
+}
+
+export interface MonthlyNote {
+  month: string;
+  goal: string;
+  reduce: string;
+  win: string;
+  updatedAt: string | null;
 }

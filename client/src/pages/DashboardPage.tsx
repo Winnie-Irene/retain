@@ -18,6 +18,7 @@ import { useRemote } from "../hooks/useRemote";
 import { dashboardApi } from "../api/services";
 import { useAppDispatch } from "../store";
 import { applyQuickFilter } from "../store/filtersSlice";
+import type { ExpenseKind } from "../types/models";
 import { currentMonthKey, formatDate, formatMoney, monthBounds, monthName } from "../utils/format";
 
 function daysLeft(month: string): number {
@@ -46,7 +47,13 @@ export function DashboardPage() {
     dispatch(applyQuickFilter({ categories: [categoryId], startDate: start, endDate: end }));
     navigate("/expenses");
   };
-
+  
+  const openKind = (kind: ExpenseKind) => {
+    const { start, end } = monthBounds(month);
+    dispatch(applyQuickFilter({ kinds: [kind], startDate: start, endDate: end }));
+    navigate("/expenses");
+  };
+  
   const openMonth = () => {
     const { start, end } = monthBounds(month);
     dispatch(applyQuickFilter({ startDate: start, endDate: end }));
@@ -175,8 +182,38 @@ export function DashboardPage() {
                       <td className="is-number">{formatMoney(Math.floor(data.budget.remaining / daysLeft(month)))}</td>
                     </tr>
                   )}
-                </tbody>
+                                </tbody>
               </table>
+              {data.totalSpent > 0 && (
+                <div className="kind-split">
+                  <p className="kind-split__title">Fixed and variable</p>
+                  <div className="kind-split__bar" aria-hidden="true">
+                    <span
+                      className="kind-split__fixed"
+                      style={{ width: `${(data.byKind.fixed.total / data.totalSpent) * 100}%` }}
+                    />
+                    <span
+                      className="kind-split__variable"
+                      style={{ width: `${(data.byKind.variable.total / data.totalSpent) * 100}%` }}
+                    />
+                  </div>
+                  <div className="kind-split__legend">
+                    {(["fixed", "variable"] as const).map((kind) => (
+                      <button type="button" key={kind} className="kind-split__item" onClick={() => openKind(kind)}>
+                        <span className={`kind-split__dot kind-split__dot--${kind}`} aria-hidden="true" />
+                        <span>{kind === "fixed" ? "Fixed" : "Variable"}</span>
+                        <strong className="num">{formatMoney(data.byKind[kind].total)}</strong>
+                        <small className="num">{data.byKind[kind].count}</small>
+                      </button>
+                    ))}
+                  </div>
+                  <p className="kind-split__note">
+                    {data.byKind.fixed.total > 0
+                      ? `Your fixed costs are ${Math.round((data.byKind.fixed.total / data.totalSpent) * 100)}% of the month. The rest is where small changes add up.`
+                      : "No fixed costs recorded this month. Mark rent or subscriptions as fixed to see the split."}
+                  </p>
+                </div>
+              )}
             </Sheet>
 
             <Sheet

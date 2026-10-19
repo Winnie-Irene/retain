@@ -9,6 +9,7 @@ import { ConfirmDialog } from "../components/ui/ConfirmDialog";
 import { BudgetMeter } from "../components/budget/BudgetMeter";
 import { BudgetEditor } from "../components/budget/BudgetEditor";
 import { BudgetHistoryChart } from "../components/charts/BudgetHistoryChart";
+import { MonthNotes } from "../components/notes/MonthNotes";
 import { useMonthParam } from "../hooks/useMonthParam";
 import { useRemote } from "../hooks/useRemote";
 import { budgetApi } from "../api/services";
@@ -108,6 +109,8 @@ export function BudgetPage() {
         </Sheet>
       </div>
 
+      <MonthNotes month={month} />
+      
       {history.data && (
         <Sheet title="Month by Month" flush className="budget-history">
           <div className="ledger-wrap">

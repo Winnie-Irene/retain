@@ -8,12 +8,13 @@ import {
   setSearch,
   setSort,
   toggleCategory,
+  toggleKind,
   togglePaymentMethod,
 } from "../../store/filtersSlice";
 import { selectActiveFilterCount, selectFilters } from "../../store/selectors";
 import { useCategories } from "../../hooks/useCategories";
 import { useDebouncedValue } from "../../hooks/useDebouncedValue";
-import { PAYMENT_METHODS, SORT_OPTIONS } from "../../utils/constants";
+import { EXPENSE_KINDS, PAYMENT_METHODS, SORT_OPTIONS } from "../../utils/constants";
 import { currentMonthKey, monthBounds, shiftMonth, todayInputValue } from "../../utils/format";
 import type { SortField, SortOrder } from "../../types/models";
 
@@ -163,6 +164,27 @@ export function ExpenseFilters() {
                   onClick={() => dispatch(togglePaymentMethod(method.value))}
                 >
                   {method.label}
+                </button>
+              );
+            })}
+          </div>
+        </fieldset>
+
+        <fieldset className="filters__group">
+          <legend>Type</legend>
+          <div className="chips">
+            {EXPENSE_KINDS.map((kind) => {
+              const active = filters.kinds.includes(kind.value);
+              return (
+                <button
+                  type="button"
+                  key={kind.value}
+                  className={`chip chip--plain ${active ? "is-active" : ""}`}
+                  aria-pressed={active}
+                  title={kind.hint}
+                  onClick={() => dispatch(toggleKind(kind.value))}
+                >
+                  {kind.label}
                 </button>
               );
             })}

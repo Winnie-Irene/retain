@@ -11,6 +11,7 @@ import type {
   Category,
   Expense,
   ExpenseInput,
+  MonthlyNote,
   SavingsGoal,
   SavingsSummary,
   User,
@@ -112,4 +113,10 @@ export const savingsApi = {
     request<{ goal: SavingsGoal }>(`/savings/${id}/contributions`, { method: "POST", body: { amount, note } }),
   removeContribution: (id: string, contributionId: string) =>
     request<{ goal: SavingsGoal }>(`/savings/${id}/contributions/${contributionId}`, { method: "DELETE" }),
+};
+
+export const notesApi = {
+  get: (month: string) => request<{ note: MonthlyNote }>(`/notes/${month}`),
+  save: (month: string, payload: Pick<MonthlyNote, "goal" | "reduce" | "win">) =>
+    request<{ note: MonthlyNote }>(`/notes/${month}`, { method: "PUT", body: payload }),
 };
