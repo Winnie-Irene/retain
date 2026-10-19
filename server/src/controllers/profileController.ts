@@ -3,6 +3,7 @@ import { User, passwordMatches, toPublicUser } from "../models/User.js";
 import { Expense } from "../models/Expense.js";
 import { Budget } from "../models/Budget.js";
 import { SavingsGoal } from "../models/SavingsGoal.js";
+import { MonthlyNote } from "../models/MonthlyNote.js";
 import { currentUser } from "../middleware/auth.js";
 import { AppError } from "../utils/AppError.js";
 import { deleteAccountSchema, passwordChangeSchema, preferencesSchema, profileSchema } from "../validators/profile.js";
@@ -85,6 +86,7 @@ export async function deleteAccount(req: Request, res: Response) {
     Expense.deleteMany({ user: user._id }),
     Budget.deleteMany({ user: user._id }),
     SavingsGoal.deleteMany({ user: user._id }),
+    MonthlyNote.deleteMany({ user: user._id }),
   ]);
   await user.deleteOne();
 

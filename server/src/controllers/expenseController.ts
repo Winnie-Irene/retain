@@ -25,7 +25,11 @@ function buildFilter(userId: string, query: ExpenseQuery): QueryFilter<ExpenseFi
   if (query.paymentMethods.length > 0) {
     filter.paymentMethod = { $in: query.paymentMethods };
   }
-
+  
+  if (query.kinds.length > 0) {
+    filter.kind = { $in: query.kinds.includes("variable") ? [...query.kinds, null] : query.kinds };
+  }
+  
   if (query.startDate || query.endDate) {
     const range: { $gte?: Date; $lt?: Date } = {};
     if (query.startDate) range.$gte = query.startDate;

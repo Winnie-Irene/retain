@@ -15,26 +15,33 @@ export async function userDashboard(req: Request, res: Response) {
   const { start, end } = monthRange(month);
   const match = { user: new Types.ObjectId(id), date: { $gte: start, $lt: end } };
 
-  const [budget, previousSpent, highest, categoryRows, dailyRows, methodRows, recent, expenseCount] = await Promise.all([
-    summarizeBudget(id, month),
-    spentInMonth(id, previousMonthKey(month)),
-    Expense.findOne(match).sort({ amount: -1 }).populate("category"),
-    Expense.aggregate<CategoryGroupRow>([
-      { $match: match },
-      { $group: { _id: "$category", total: { $sum: "$amount" }, count: { $sum: 1 } } },
-    ]),
-    Expense.aggregate<{ _id: number; total: number }>([
-      { $match: match },
-      { $group: { _id: { $dayOfMonth: "$date" }, total: { $sum: "$amount" } } },
-    ]),
-    Expense.aggregate<{ _id: PaymentMethod; total: number; count: number }>([
-      { $match: match },
-      { $group: { _id: "$paymentMethod", total: { $sum: "$amount" }, count: { $sum: 1 } } },
-      { $sort: { total: -1 } },
-    ]),
-    Expense.find(match).sort({ date: -1, createdAt: -1 }).limit(6).populate("category"),
-    Expense.countDocuments(match),
-  ]);
+  const [budget, previousSpent, highest, categoryRows, dailyRows, methodRows, recent, expenseCount, kindRows] =
+    await Promise.all([
+      summarizeBudget(id, month),
+      spentInMonth(id, previousMonthKey(month)),
+      Expense.findOne(match).sort({ amount: -1 }).populate("category"),
+      Expense.aggregate<CategoryGroupRow>([
+        { $match: match },
+        { $group: { _id: "$category", total: { $sum: "$amount" }, count: { $sum: 1 } } },
+      ]),
+      Expense.aggregate<{ _id: number; total: number }>([
+        { $match: match },
+        { $group: { _id: { $dayOfMonth: "$date" }, total: { $sum: "$amount" } } },
+      ]),
+      Expense.aggregate<{ _id: PaymentMethod; total: number; count: number }>([
+        { $match: match },
+        { $group: { _id: "$paymentMethod", total: { $sum: "$amount" }, count: { $sum: 1 } } },
+        { $sort: { total: -1 } },
+      ]),
+      Expense.find(match).sort({ date: -1, createdAt: -1 }).limit(6).populate("category"),
+      Expense.countDocuments(match),
+      Expense.aggregate<{ _id: string; total: number; count: number }>([
+        { $match: match },
+        { $group: { _id: { $ifNull: ["$kind", "variable"] }, total: { $sum: "$amount" }, count: { $sum: 1 } } },
+      ]),
+    ]);
+
+  const kindTotal = (kind: string) => kindRows.find((row) => row._id === kind);
 
   const totals = new Map(dailyRows.map((row) => [row._id, row.total]));
   let running = 0;
@@ -63,6 +70,10 @@ export async function userDashboard(req: Request, res: Response) {
       total: round(row.total),
       count: row.count,
     })),
+    byKind: {
+      fixed: { total: round(kindTotal("fixed")?.total ?? 0), count: kindTotal("fixed")?.count ?? 0 },
+      variable: { total: round(kindTotal("variable")?.total ?? 0), count: kindTotal("variable")?.count ?? 0 },
+    },
     daily,
     recentExpenses: recent.map(serializeExpense),
   });

@@ -11,6 +11,9 @@ export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
   bank_transfer: "Bank Transfer",
 };
 
+export const EXPENSE_KINDS = ["fixed", "variable"] as const;
+export type ExpenseKind = (typeof EXPENSE_KINDS)[number];
+
 export const DEFAULT_CATEGORY_NAME = "Uncategorized";
 export const DEFAULT_CATEGORY_COLOR = "#B8A9A1";
 

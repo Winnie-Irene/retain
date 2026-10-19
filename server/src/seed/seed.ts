@@ -6,6 +6,7 @@ import { Category, slugify } from "../models/Category.js";
 import { Expense } from "../models/Expense.js";
 import { Budget } from "../models/Budget.js";
 import { SavingsGoal } from "../models/SavingsGoal.js";
+import { MonthlyNote } from "../models/MonthlyNote.js";
 import { ensureDefaultCategory } from "../services/categoryService.js";
 import { currentMonthKey, daysInMonth, previousMonthKey } from "../utils/dates.js";
 import { noteSamples, seedCategories, seedUsers, type SeedCategory } from "./data.js";
@@ -49,6 +50,7 @@ interface ExpenseDraft {
   date: Date;
   paymentMethod: SeedCategory["methods"][number];
   notes: string;
+  kind: "fixed" | "variable";
   createdAt: Date;
   updatedAt: Date;
 }
@@ -88,6 +90,7 @@ function buildMonthExpenses(
       date,
       paymentMethod: pick(category.methods),
       notes: pick(noteSamples),
+      kind: FIXED_CATEGORIES.includes(category.name) ? "fixed" : "variable",
       createdAt: date,
       updatedAt: date,
     });
@@ -112,6 +115,29 @@ function buildMonthExpenses(
 
   return drafts;
 }
+
+  const FIXED_CATEGORIES = ["Rent & Housing", "Utilities", "Subscriptions", "Education"];
+
+  function buildMonthlyNotes(user: Types.ObjectId, months: string[]) {
+    const entries = [
+      {
+        goal: "Keep transport under 40,000 by walking to campus on dry days.",
+        reduce: "Takeaway lunches. Pack food at least three days a week.",
+        win: "Put 50,000 into the emergency fund before the 10th.",
+      },
+      {
+        goal: "Stay within budget and save 75,000 for the laptop.",
+        reduce: "Impulse shopping at the end of the month.",
+        win: "Tracked every single expense, even the 500 franc ones.",
+      },
+      {
+        goal: "Finish the month with at least 20,000 left over.",
+        reduce: "Data bundles. Use campus wifi more.",
+        win: "",
+      },
+    ];
+    return months.slice(-3).map((month, index) => ({ user, month, ...entries[index] }));
+  }
 
    function daysAgo(days: number): Date {
      return new Date(Date.now() - days * 24 * 60 * 60 * 1000);
@@ -186,6 +212,7 @@ async function seed() {
        Expense.deleteMany({}),
        Budget.deleteMany({}),
        SavingsGoal.deleteMany({}),
+       MonthlyNote.deleteMany({}),
      ]);
 
   await ensureDefaultCategory();
@@ -260,6 +287,7 @@ async function seed() {
 
   await Budget.insertMany(budgets);
   await SavingsGoal.insertMany(buildSavingsGoals(demo._id));
+  await MonthlyNote.insertMany(buildMonthlyNotes(demo._id, months));
   await Expense.insertMany(expenses, { ordered: false });
 
   console.log(`Created ${otherUsers.length + 2} users, ${budgets.length} budgets and ${expenses.length} expenses`);

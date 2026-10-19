@@ -7,6 +7,7 @@ import { dashboardRouter } from "./dashboardRoutes.js";
 import { adminRouter } from "./adminRoutes.js";
 import { profileRouter } from "./profileRoutes.js";
 import { savingsRouter } from "./savingsRoutes.js";
+import { notesRouter } from "./notesRoutes.js";
 
 export const apiRouter = Router();
 
@@ -22,3 +23,4 @@ apiRouter.use("/dashboard", dashboardRouter);
 apiRouter.use("/admin", adminRouter);
 apiRouter.use("/profile", profileRouter);
 apiRouter.use("/savings", savingsRouter);
+apiRouter.use("/notes", notesRouter);

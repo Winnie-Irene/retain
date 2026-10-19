@@ -17,6 +17,7 @@ export interface PublicExpense {
   date: string;
   paymentMethod: string;
   notes: string;
+  kind: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -38,6 +39,7 @@ interface ExpenseLike {
   date: Date;
   paymentMethod: string;
   notes?: string | null;
+  kind?: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -66,6 +68,7 @@ export function serializeExpense(expense: ExpenseLike): PublicExpense {
     date: expense.date.toISOString(),
     paymentMethod: expense.paymentMethod,
     notes: expense.notes ?? "",
+    kind: expense.kind ?? "variable",
     createdAt: expense.createdAt.toISOString(),
     updatedAt: expense.updatedAt.toISOString(),
   };
