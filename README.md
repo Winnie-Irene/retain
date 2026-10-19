@@ -44,7 +44,12 @@ Anyone can sign up as a normal user. Nobody can sign up as an admin. Admin accou
 
 ### For admins
 
+Admins look after the platform rather than keep a personal planner. Their sidebar mirrors the member one, but every page is a summary of the whole platform: totals, counts and averages, never one person's list. The personal pages and their API endpoints are closed to admin accounts.
+
 - **Category management.** Create, rename, recolour and delete categories. When a category is deleted, every expense that used it moves to **Uncategorized**, a protected default category that cannot be renamed or deleted. Nobody loses their records because an admin tidied up.
+- **Platform spending.** For any month: total recorded, number of expenses, active spenders, average per user, spending by category and payment method, the fixed and variable split, a day by day chart and the busiest days of the week.
+- **Platform budgets.** For any month: how many members set a budget, how many are within, approaching or over (each judged by the member's own warning level), the average budget and average percentage used, and a six month chart of budget statuses.
+- **Platform savings.** Number of goals and savers, total saved against total targets, goals reached, money added this month, average progress, goals grouped by progress, and the most common things people save for.
 - **Platform insights.** Total registered users, total number and value of expenses recorded, expenses recorded this month, total spending per category, the top 5 most used and bottom 5 least used categories, a six month trend, recently added expenses (with who added them) and recently registered users.
 
 ## Tech stack
@@ -97,7 +102,7 @@ The `filters` slice holds everything about how the expense list is being viewed:
 
 ### Keeping data private
 
-Every expense, budget, savings goal and note query on the server includes the signed in user's id, so one person can never read or change another person's data, even by guessing an id. Admin routes go through both `requireAuth` and `requireAdmin`, and the role is read from the database on every request rather than trusted from the token alone. Repeated failed sign in attempts are slowed down by a rate limit.
+Every expense, budget, savings goal and note query on the server includes the signed in user's id, so one person can never read or change another person's data, even by guessing an id. Admin routes go through both `requireAuth` and `requireAdmin`, personal routes go through `requireAuth` and `requireMember`, and the role is read from the database on every request rather than trusted from the token alone. Repeated failed sign in attempts are slowed down by a rate limit.
 
 ## Running it locally
 
@@ -267,6 +272,9 @@ Expense body:
 | Method | Endpoint | Access | Description |
 | --- | --- | --- | --- |
 | GET | `/dashboard?month=2026-10` | Owner | Totals, budget status, highest expense, category, payment and fixed or variable breakdowns, daily pace and recent expenses |
+| GET | `/admin/expenses?month=2026-10` | Admin | Platform spending summary for a month |
+| GET | `/admin/budgets?month=2026-10` | Admin | Budget status counts, averages and a six month status history |
+| GET | `/admin/savings` | Admin | Savings goal totals, progress groups and the most common goals |
 | GET | `/admin/insights` | Admin | Platform totals, spending per category, top and bottom 5 categories, six month trend, recent expenses and new users |
 | GET | `/health` | Public | Health check |
 
