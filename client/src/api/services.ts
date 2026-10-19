@@ -1,6 +1,9 @@
 import { request, toQueryString, type QueryValue } from "./client";
 import type {
+  AdminBudgetSummary,
+  AdminExpenseSummary,
   AdminInsightsResponse,
+  AdminSavingsSummary,
   AuthResponse,
   DashboardResponse,
   DeleteCategoryResponse,
@@ -92,6 +95,9 @@ export const dashboardApi = {
 
 export const adminApi = {
   insights: () => request<AdminInsightsResponse>("/admin/insights"),
+  expenses: (month: string) => request<AdminExpenseSummary>(`/admin/expenses${toQueryString({ month })}`),
+  budgets: (month: string) => request<AdminBudgetSummary>(`/admin/budgets${toQueryString({ month })}`),
+  savings: () => request<AdminSavingsSummary>("/admin/savings"),
 };
 
 export const profileApi = {

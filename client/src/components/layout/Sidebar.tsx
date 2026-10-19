@@ -23,6 +23,9 @@ const accountNav: NavItem[] = [{ to: "/settings", label: "Settings", icon: <Sett
 
 const adminNav: NavItem[] = [
   { to: "/admin", label: "Insights", icon: <Sparkles size={18} />, end: true },
+  { to: "/admin/expenses", label: "Expenses", icon: <ReceiptText size={18} /> },
+  { to: "/admin/budgets", label: "Budgets", icon: <PiggyBank size={18} /> },
+  { to: "/admin/savings", label: "Savings", icon: <Sprout size={18} /> },
   { to: "/admin/categories", label: "Categories", icon: <Shapes size={18} /> },
 ];
 

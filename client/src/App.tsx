@@ -24,6 +24,15 @@ const PrivacyPage = lazy(() => import("./pages/legal/PrivacyPage").then((module)
 const AdminInsightsPage = lazy(() =>
   import("./pages/admin/AdminInsightsPage").then((module) => ({ default: module.AdminInsightsPage })),
 );
+const AdminExpensesPage = lazy(() =>
+  import("./pages/admin/AdminExpensesPage").then((module) => ({ default: module.AdminExpensesPage })),
+);
+const AdminBudgetsPage = lazy(() =>
+  import("./pages/admin/AdminBudgetsPage").then((module) => ({ default: module.AdminBudgetsPage })),
+);
+const AdminSavingsPage = lazy(() =>
+  import("./pages/admin/AdminSavingsPage").then((module) => ({ default: module.AdminSavingsPage })),
+);
 const AdminCategoriesPage = lazy(() =>
   import("./pages/admin/AdminCategoriesPage").then((module) => ({ default: module.AdminCategoriesPage })),
 );
@@ -58,6 +67,9 @@ export function App() {
 
             <Route element={<AdminRoute />}>
               <Route path="/admin" element={<AdminInsightsPage />} />
+              <Route path="/admin/expenses" element={<AdminExpensesPage />} />
+              <Route path="/admin/budgets" element={<AdminBudgetsPage />} />
+              <Route path="/admin/savings" element={<AdminSavingsPage />} />
               <Route path="/admin/categories" element={<AdminCategoriesPage />} />
             </Route>
           </Route>

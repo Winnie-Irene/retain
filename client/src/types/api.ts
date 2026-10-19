@@ -85,3 +85,54 @@ export interface ApiErrorBody {
   message: string;
   details?: { field: string; message: string }[] | string;
 }
+
+export interface AdminExpenseSummary {
+  month: string;
+  totalSpent: number;
+  expenseCount: number;
+  averageExpense: number;
+  activeSpenders: number;
+  averagePerSpender: number;
+  previousMonthSpent: number;
+  changeFromPrevious: number | null;
+  byCategory: CategoryBreakdown[];
+  byPaymentMethod: PaymentMethodBreakdown[];
+  byKind: Record<ExpenseKind, { total: number; count: number }>;
+  byWeekday: { day: string; total: number; count: number }[];
+  daily: { day: number; total: number }[];
+}
+
+export interface AdminBudgetHistoryPoint {
+  month: string;
+  withBudget: number;
+  within: number;
+  approaching: number;
+  over: number;
+}
+
+export interface AdminBudgetSummary {
+  month: string;
+  members: number;
+  withBudget: number;
+  withoutBudget: number;
+  statusCounts: { within: number; approaching: number; over: number };
+  averageBudget: number;
+  averagePercentUsed: number;
+  totalBudgeted: number;
+  totalSpentAgainstBudgets: number;
+  history: AdminBudgetHistoryPoint[];
+}
+
+export interface AdminSavingsSummary {
+  goals: number;
+  savers: number;
+  totalSaved: number;
+  totalTarget: number;
+  completed: number;
+  withDeadline: number;
+  overdue: number;
+  averageProgress: number;
+  addedThisMonth: number;
+  progress: { label: string; count: number }[];
+  popular: { name: string; count: number; saved: number }[];
+}
