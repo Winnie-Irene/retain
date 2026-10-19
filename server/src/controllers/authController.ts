@@ -13,7 +13,13 @@ export async function register(req: Request, res: Response) {
     throw AppError.conflict("An account with this email already exists");
   }
 
-  const user = await User.create({ ...input, role: "user" });
+  const user = await User.create({
+    name: input.name,
+    email: input.email,
+    password: input.password,
+    role: "user",
+    termsAcceptedAt: new Date(),
+  });
   const token = signToken({ sub: user._id.toString(), role: user.role });
 
   res.status(201).json({ token, user: toPublicUser(user) });

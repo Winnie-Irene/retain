@@ -14,4 +14,7 @@ export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
 export const DEFAULT_CATEGORY_NAME = "Uncategorized";
 export const DEFAULT_CATEGORY_COLOR = "#B8A9A1";
 
-export const APPROACHING_BUDGET_RATIO = 0.8;
+export const DEFAULT_ALERT_PERCENT = 80;
+
+export const LANDING_PAGES = ["dashboard", "expenses", "budget", "savings"] as const;
+export type LandingPage = (typeof LANDING_PAGES)[number];

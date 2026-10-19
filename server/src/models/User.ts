@@ -1,6 +1,6 @@
 import { Schema, model, type HydratedDocument, type InferSchemaType } from "mongoose";
 import bcrypt from "bcryptjs";
-import { ROLES } from "../config/constants.js";
+import { DEFAULT_ALERT_PERCENT, LANDING_PAGES, ROLES } from "../config/constants.js";
 
 const userSchema = new Schema(
   {
@@ -9,6 +9,12 @@ const userSchema = new Schema(
     password: { type: String, required: true, minlength: 8, select: false },
     role: { type: String, enum: ROLES, default: "user" },
     currency: { type: String, default: "RWF", maxlength: 3 },
+    avatar: { type: String, default: "", maxlength: 400_000 },
+    preferences: {
+      alertAt: { type: Number, default: DEFAULT_ALERT_PERCENT, min: 50, max: 95 },
+      landingPage: { type: String, enum: LANDING_PAGES, default: "dashboard" },
+    },
+    termsAcceptedAt: { type: Date, default: null },
   },
   { timestamps: true },
 );
@@ -30,6 +36,11 @@ export function toPublicUser(user: UserDocument) {
     email: user.email,
     role: user.role,
     currency: user.currency,
+    avatar: user.avatar ?? "",
+    preferences: {
+      alertAt: user.preferences?.alertAt ?? DEFAULT_ALERT_PERCENT,
+      landingPage: user.preferences?.landingPage ?? "dashboard",
+    },
     createdAt: user.createdAt,
   };
 }

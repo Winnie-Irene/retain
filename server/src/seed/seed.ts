@@ -5,6 +5,7 @@ import { User } from "../models/User.js";
 import { Category, slugify } from "../models/Category.js";
 import { Expense } from "../models/Expense.js";
 import { Budget } from "../models/Budget.js";
+import { SavingsGoal } from "../models/SavingsGoal.js";
 import { ensureDefaultCategory } from "../services/categoryService.js";
 import { currentMonthKey, daysInMonth, previousMonthKey } from "../utils/dates.js";
 import { noteSamples, seedCategories, seedUsers, type SeedCategory } from "./data.js";
@@ -112,10 +113,80 @@ function buildMonthExpenses(
   return drafts;
 }
 
+   function daysAgo(days: number): Date {
+     return new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+   }
+
+   function monthsAhead(months: number): Date {
+     const date = new Date();
+     date.setMonth(date.getMonth() + months, 15);
+     date.setHours(12, 0, 0, 0);
+     return date;
+   }
+
+   function buildSavingsGoals(user: Types.ObjectId) {
+     return [
+       {
+         user,
+         name: "Emergency fund",
+         targetAmount: 600000,
+         targetDate: monthsAhead(8),
+         color: "#8E9C78",
+         contributions: [
+           { amount: 50000, note: "Starting amount", date: daysAgo(150) },
+           { amount: 40000, note: "From May allowance", date: daysAgo(120) },
+           { amount: 45000, note: "Side gig money", date: daysAgo(90) },
+           { amount: 40000, note: "", date: daysAgo(60) },
+           { amount: -15000, note: "Clinic visit", date: daysAgo(45) },
+           { amount: 50000, note: "", date: daysAgo(25) },
+           { amount: 35000, note: "October top up", date: daysAgo(4) },
+         ],
+       },
+       {
+         user,
+         name: "New laptop",
+         targetAmount: 900000,
+         targetDate: monthsAhead(5),
+         color: "#B48EAE",
+         contributions: [
+           { amount: 100000, note: "Starting amount", date: daysAgo(100) },
+           { amount: 80000, note: "", date: daysAgo(70) },
+           { amount: 60000, note: "Birthday money", date: daysAgo(40) },
+           { amount: 75000, note: "", date: daysAgo(10) },
+         ],
+       },
+       {
+         user,
+         name: "Trip to Zanzibar",
+         targetAmount: 450000,
+         targetDate: monthsAhead(14),
+         color: "#E89A9A",
+         contributions: [{ amount: 30000, note: "Starting amount", date: daysAgo(20) }],
+       },
+       {
+         user,
+         name: "Phone repair",
+         targetAmount: 120000,
+         targetDate: null,
+         color: "#C9A27E",
+         contributions: [
+           { amount: 60000, note: "Starting amount", date: daysAgo(80) },
+           { amount: 60000, note: "Done", date: daysAgo(50) },
+         ],
+       },
+     ];
+   }
+
 async function seed() {
   await connectDatabase();
   console.log("Clearing existing data...");
-  await Promise.all([User.deleteMany({}), Category.deleteMany({}), Expense.deleteMany({}), Budget.deleteMany({})]);
+       await Promise.all([
+       User.deleteMany({}),
+       Category.deleteMany({}),
+       Expense.deleteMany({}),
+       Budget.deleteMany({}),
+       SavingsGoal.deleteMany({}),
+     ]);
 
   await ensureDefaultCategory();
   const categories = await Category.insertMany(
@@ -134,6 +205,7 @@ async function seed() {
     email: env.SEED_ADMIN_EMAIL,
     password: env.SEED_ADMIN_PASSWORD,
     role: "admin",
+    termsAcceptedAt: new Date(),
   });
   await Category.updateMany({}, { $set: { createdBy: admin._id } });
 
@@ -142,6 +214,7 @@ async function seed() {
     email: env.SEED_DEMO_EMAIL,
     password: env.SEED_DEMO_PASSWORD,
     role: "user",
+    termsAcceptedAt: new Date(),
   });
 
   const months = monthKeys(6);
@@ -154,6 +227,7 @@ async function seed() {
       email: `${name.toLowerCase().replace(/[^a-z]+/g, ".")}@example.com`,
       password: "Password@2026",
       role: "user" as const,
+      termsAcceptedAt: joined,
       createdAt: joined,
       updatedAt: joined,
     });
@@ -185,6 +259,7 @@ async function seed() {
   }
 
   await Budget.insertMany(budgets);
+  await SavingsGoal.insertMany(buildSavingsGoals(demo._id));
   await Expense.insertMany(expenses, { ordered: false });
 
   console.log(`Created ${otherUsers.length + 2} users, ${budgets.length} budgets and ${expenses.length} expenses`);

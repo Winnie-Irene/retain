@@ -21,7 +21,7 @@ export function createApp() {
       },
     }),
   );
-  app.use(express.json({ limit: "100kb" }));
+  app.use(express.json({ limit: "600kb" }));
   app.use(morgan(env.NODE_ENV === "production" ? "combined" : "dev"));
 
   app.get("/", (_req, res) => {
