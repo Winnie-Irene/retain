@@ -5,6 +5,7 @@ import { AuthLayout } from "./AuthLayout";
 import { TextField } from "../../components/ui/Field";
 import { Button } from "../../components/ui/Button";
 import { useAuth } from "../../hooks/useAuth";
+import { homePathFor } from "../../context/authContextValue";
 import { ApiError, errorMessage } from "../../api/client";
 
 interface LocationState {
@@ -35,7 +36,7 @@ export function LoginPage() {
       const user = await signIn({ email, password });
       toast.success(`Welcome back, ${user.name.split(" ")[0]}`);
       const from = (location.state as LocationState | null)?.from;
-      navigate(from ?? (user.role === "admin" ? "/admin" : "/dashboard"), { replace: true });
+      navigate(from ?? homePathFor(user), { replace: true });
     } catch (error) {
       if (error instanceof ApiError) setErrors(error.fieldErrors);
       setFormError(errorMessage(error));

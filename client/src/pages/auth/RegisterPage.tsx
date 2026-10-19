@@ -12,6 +12,7 @@ interface FormState {
   email: string;
   password: string;
   confirm: string;
+  acceptTerms: boolean;
 }
 
 function validate(form: FormState): Record<string, string> {
@@ -22,18 +23,26 @@ function validate(form: FormState): Record<string, string> {
   else if (!/[A-Za-z]/.test(form.password) || !/[0-9]/.test(form.password))
     errors.password = "Mix in at least one letter and one number";
   if (form.confirm !== form.password) errors.confirm = "Passwords do not match";
+  if (!form.acceptTerms) errors.acceptTerms = "Please accept the terms to continue";
   return errors;
 }
 
 export function RegisterPage() {
   const { signUp } = useAuth();
   const navigate = useNavigate();
-  const [form, setForm] = useState<FormState>({ name: "", email: "", password: "", confirm: "" });
+  const [form, setForm] = useState<FormState>({
+    name: "",
+    email: "",
+    password: "",
+    confirm: "",
+    acceptTerms: false,
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const update = (field: keyof FormState) => (value: string) => setForm((current) => ({ ...current, [field]: value }));
+  const update = (field: Exclude<keyof FormState, "acceptTerms">) => (value: string) =>
+    setForm((current) => ({ ...current, [field]: value }));
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -44,7 +53,12 @@ export function RegisterPage() {
 
     setSubmitting(true);
     try {
-      const user = await signUp({ name: form.name.trim(), email: form.email.trim(), password: form.password });
+      const user = await signUp({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        password: form.password,
+        acceptTerms: form.acceptTerms,
+      });
       toast.success(`Your planner is ready, ${user.name.split(" ")[0]}`);
       navigate("/budget", { replace: true, state: { firstVisit: true } });
     } catch (error) {
@@ -104,6 +118,31 @@ export function RegisterPage() {
             onChange={(event) => update("confirm")(event.target.value)}
             error={errors.confirm}
           />
+        </div>
+        <div className={`check ${errors.acceptTerms ? "check--error" : ""}`}>
+          <input
+            id="accept-terms"
+            type="checkbox"
+            checked={form.acceptTerms}
+            onChange={(event) => setForm((current) => ({ ...current, acceptTerms: event.target.checked }))}
+            aria-invalid={Boolean(errors.acceptTerms) || undefined}
+            aria-describedby={errors.acceptTerms ? "accept-terms-message" : undefined}
+          />
+          <label htmlFor="accept-terms">
+            I agree to the{" "}
+            <Link to="/terms" target="_blank" rel="noreferrer">
+              Terms of Use
+            </Link>{" "}
+            and the{" "}
+            <Link to="/privacy" target="_blank" rel="noreferrer">
+              Privacy Policy
+            </Link>
+          </label>
+          {errors.acceptTerms && (
+            <p className="field__message field__message--error" id="accept-terms-message" role="alert">
+              {errors.acceptTerms}
+            </p>
+          )}
         </div>
         <Button type="submit" block loading={submitting}>
           Create account

@@ -29,10 +29,10 @@ export function AdminRoute() {
 }
 
 export function GuestRoute() {
-  const { status, isAdmin } = useAuth();
+  const { status, homePath } = useAuth();
 
   if (status === "checking") return <FullPageLoader />;
-  if (status === "authenticated") return <Navigate to={isAdmin ? "/admin" : "/dashboard"} replace />;
+  if (status === "authenticated") return <Navigate to={homePath} replace />;
 
   return <Outlet />;
 }

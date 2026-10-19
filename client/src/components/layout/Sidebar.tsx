@@ -1,8 +1,8 @@
-import { NavLink } from "react-router-dom";
-import { LayoutDashboard, LogOut, PiggyBank, ReceiptText, Shapes, Sparkles } from "lucide-react";
+import { Link, NavLink } from "react-router-dom";
+import { LayoutDashboard, LogOut, PiggyBank, ReceiptText, Settings, Shapes, Sparkles, Sprout } from "lucide-react";
 import type { ReactNode } from "react";
 import { useAuth } from "../../hooks/useAuth";
-import { initials } from "../../utils/format";
+import { Avatar } from "../ui/Avatar";
 import { Moon, Sprig, Sun } from "../ornaments/Ornaments";
 
 interface NavItem {
@@ -16,7 +16,10 @@ const personalNav: NavItem[] = [
   { to: "/dashboard", label: "Overview", icon: <LayoutDashboard size={18} /> },
   { to: "/expenses", label: "Expenses", icon: <ReceiptText size={18} /> },
   { to: "/budget", label: "Budget", icon: <PiggyBank size={18} /> },
+  { to: "/savings", label: "Savings", icon: <Sprout size={18} /> },
 ];
+
+const accountNav: NavItem[] = [{ to: "/settings", label: "Settings", icon: <Settings size={18} /> }];
 
 const adminNav: NavItem[] = [
   { to: "/admin", label: "Insights", icon: <Sparkles size={18} />, end: true },
@@ -64,22 +67,33 @@ export function Sidebar({ onNavigate }: SidebarProps) {
         )}
         <p className="sidebar__group">{isAdmin ? "My money" : "Planner"}</p>
         <ul>{renderLinks(personalNav)}</ul>
+        <p className="sidebar__group">Account</p>
+        <ul>{renderLinks(accountNav)}</ul>
       </nav>
 
       {user && (
         <div className="sidebar__user">
-          <span className="avatar" aria-hidden="true">
-            {initials(user.name)}
-          </span>
-          <div className="sidebar__who">
-            <p className="sidebar__name">{user.name}</p>
-            <p className="sidebar__role">{user.role === "admin" ? "Administrator" : user.email}</p>
-          </div>
+          <Link to="/settings" className="sidebar__profile" onClick={onNavigate} title="Open your profile">
+            <Avatar name={user.name} src={user.avatar} />
+            <div className="sidebar__who">
+              <p className="sidebar__name">{user.name}</p>
+              <p className="sidebar__role">{user.role === "admin" ? "Administrator" : user.email}</p>
+            </div>
+          </Link>
           <button type="button" className="sidebar__signout" onClick={signOut} aria-label="Sign out" title="Sign out">
             <LogOut size={18} />
           </button>
         </div>
       )}
+
+      <p className="sidebar__legal">
+        <Link to="/terms" onClick={onNavigate}>
+          Terms
+        </Link>
+        <Link to="/privacy" onClick={onNavigate}>
+          Privacy
+        </Link>
+      </p>
     </aside>
   );
 }

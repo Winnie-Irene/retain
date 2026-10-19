@@ -8,12 +8,21 @@ export type SortField = "date" | "amount" | "title" | "createdAt";
 
 export type SortOrder = "asc" | "desc";
 
+export type LandingPage = "dashboard" | "expenses" | "budget" | "savings";
+
+export interface UserPreferences {
+  alertAt: number;
+  landingPage: LandingPage;
+}
+
 export interface User {
   id: string;
   name: string;
   email: string;
   role: Role;
   currency: string;
+  avatar: string;
+  preferences: UserPreferences;
   createdAt: string;
 }
 
@@ -54,6 +63,7 @@ export interface BudgetSummary {
   remaining: number | null;
   percentUsed: number | null;
   status: BudgetStatus;
+  alertAt: number;
 }
 
 export interface CategoryBreakdown {
@@ -61,4 +71,36 @@ export interface CategoryBreakdown {
   total: number;
   count: number;
   share: number;
+}
+
+export interface SavingsContribution {
+  id: string;
+  amount: number;
+  note: string;
+  date: string;
+}
+
+export interface SavingsGoal {
+  id: string;
+  name: string;
+  targetAmount: number;
+  targetDate: string | null;
+  color: string;
+  saved: number;
+  remaining: number;
+  percent: number;
+  isComplete: boolean;
+  isPastDue: boolean;
+  perMonth: number | null;
+  contributions: SavingsContribution[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SavingsSummary {
+  totalSaved: number;
+  totalTarget: number;
+  completed: number;
+  count: number;
+  nextDeadline: { id: string; name: string; date: string | null } | null;
 }

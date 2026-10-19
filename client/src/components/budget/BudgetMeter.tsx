@@ -12,6 +12,7 @@ export function BudgetMeter({ budget, size = "md" }: BudgetMeterProps) {
   const percent = budget.percentUsed ?? 0;
   const fill = Math.min(percent, 100);
   const overflow = percent > 100 ? Math.min(percent - 100, 100) : 0;
+  const alertAt = budget.alertAt ?? 80;
 
   return (
     <div className={`meter meter--${size} meter--${budget.status}`}>
@@ -30,12 +31,12 @@ export function BudgetMeter({ budget, size = "md" }: BudgetMeterProps) {
       >
         <span className="meter__fill" style={{ width: `${fill}%` }} />
         {overflow > 0 && <span className="meter__overflow" style={{ width: `${overflow}%` }} />}
-        <span className="meter__mark" style={{ left: "80%" }} aria-hidden="true" />
+        <span className="meter__mark" style={{ left: `${alertAt}%` }} aria-hidden="true" />
       </div>
 
       <div className="meter__scale num" aria-hidden="true">
         <span>0</span>
-        <span style={{ left: "80%" }}>80%</span>
+        <span style={{ left: `${alertAt}%` }}>{alertAt}%</span>
         <span>{budget.amount ? formatMoney(budget.amount, "", true).trim() : "100%"}</span>
       </div>
 

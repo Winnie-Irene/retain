@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react
 import { onUnauthorized, tokenStorage } from "../api/client";
 import { authApi, type Credentials, type RegisterPayload } from "../api/services";
 import type { Role, User } from "../types/models";
-import { AuthContext, type AuthContextValue, type AuthStatus } from "./authContextValue";
+import { AuthContext, homePathFor, type AuthContextValue, type AuthStatus } from "./authContextValue";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -64,6 +64,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [startSession],
   );
 
+  const updateUser = useCallback((next: User) => setUser(next), []);
+
+  const homePath = user ? homePathFor(user) : "/login";
+
   const hasRole = useCallback((...roles: Role[]) => (user ? roles.includes(user.role) : false), [user]);
 
   const value = useMemo<AuthContextValue>(
@@ -74,9 +78,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signIn,
       signUp,
       signOut,
+      updateUser,
+      homePath,
       hasRole,
     }),
-    [user, status, signIn, signUp, signOut, hasRole],
+    [user, status, signIn, signUp, signOut, updateUser, homePath, hasRole],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

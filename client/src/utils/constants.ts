@@ -1,4 +1,4 @@
-import type { BudgetStatus, PaymentMethod, SortField, SortOrder } from "../types/models";
+import type { BudgetStatus, LandingPage, PaymentMethod, SortField, SortOrder } from "../types/models";
 
 export const PAYMENT_METHODS: { value: PaymentMethod; label: string }[] = [
   { value: "mobile_money", label: "Mobile Money" },
@@ -42,4 +42,16 @@ export const CATEGORY_SWATCHES = [
   "#C9A27E",
   "#E3B7A0",
   "#6F7D8C",
+];
+
+export const ALERT_OPTIONS = [50, 60, 70, 75, 80, 85, 90, 95].map((value) => ({
+  value: String(value),
+  label: `When I have used ${value}%`,
+}));
+
+export const LANDING_OPTIONS: { value: LandingPage; label: string }[] = [
+  { value: "dashboard", label: "Overview" },
+  { value: "expenses", label: "Expenses" },
+  { value: "budget", label: "Budget" },
+  { value: "savings", label: "Savings" },
 ];

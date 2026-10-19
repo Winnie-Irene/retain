@@ -17,6 +17,10 @@ const ExpenseDetailPage = lazy(() =>
   import("./pages/ExpenseDetailPage").then((module) => ({ default: module.ExpenseDetailPage })),
 );
 const BudgetPage = lazy(() => import("./pages/BudgetPage").then((module) => ({ default: module.BudgetPage })));
+const SavingsPage = lazy(() => import("./pages/SavingsPage").then((module) => ({ default: module.SavingsPage })));
+const SettingsPage = lazy(() => import("./pages/SettingsPage").then((module) => ({ default: module.SettingsPage })));
+const TermsPage = lazy(() => import("./pages/legal/TermsPage").then((module) => ({ default: module.TermsPage })));
+const PrivacyPage = lazy(() => import("./pages/legal/PrivacyPage").then((module) => ({ default: module.PrivacyPage })));
 const AdminInsightsPage = lazy(() =>
   import("./pages/admin/AdminInsightsPage").then((module) => ({ default: module.AdminInsightsPage })),
 );
@@ -25,7 +29,7 @@ const AdminCategoriesPage = lazy(() =>
 );
 
 export function App() {
-  const { status, isAdmin } = useAuth();
+  const { status, homePath } = useAuth();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -49,6 +53,8 @@ export function App() {
             <Route path="/expenses" element={<ExpensesPage />} />
             <Route path="/expenses/:id" element={<ExpenseDetailPage />} />
             <Route path="/budget" element={<BudgetPage />} />
+            <Route path="/savings" element={<SavingsPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
 
             <Route element={<AdminRoute />}>
               <Route path="/admin" element={<AdminInsightsPage />} />
@@ -57,12 +63,10 @@ export function App() {
           </Route>
         </Route>
 
-        <Route
-          path="/"
-          element={
-            <Navigate to={status === "authenticated" ? (isAdmin ? "/admin" : "/dashboard") : "/login"} replace />
-          }
-        />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+
+        <Route path="/" element={<Navigate to={status === "authenticated" ? homePath : "/login"} replace />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>

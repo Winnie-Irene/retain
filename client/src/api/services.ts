@@ -6,7 +6,16 @@ import type {
   DeleteCategoryResponse,
   ExpenseListResponse,
 } from "../types/api";
-import type { BudgetSummary, Category, Expense, ExpenseInput, User } from "../types/models";
+import type {
+  BudgetSummary,
+  Category,
+  Expense,
+  ExpenseInput,
+  SavingsGoal,
+  SavingsSummary,
+  User,
+  UserPreferences,
+} from "../types/models";
 
 export interface Credentials {
   email: string;
@@ -15,6 +24,26 @@ export interface Credentials {
 
 export interface RegisterPayload extends Credentials {
   name: string;
+  acceptTerms: boolean;
+}
+
+export interface ProfilePayload {
+  name?: string;
+  email?: string;
+  avatar?: string;
+}
+
+export interface PasswordPayload {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface GoalPayload {
+  name: string;
+  targetAmount: number;
+  targetDate: string | null;
+  color: string;
+  startingAmount?: number;
 }
 
 export interface CategoryPayload {
@@ -62,4 +91,25 @@ export const dashboardApi = {
 
 export const adminApi = {
   insights: () => request<AdminInsightsResponse>("/admin/insights"),
+};
+
+export const profileApi = {
+  update: (payload: ProfilePayload) => request<{ user: User }>("/profile", { method: "PATCH", body: payload }),
+  preferences: (payload: Partial<UserPreferences>) =>
+    request<{ user: User }>("/profile/preferences", { method: "PATCH", body: payload }),
+  changePassword: (payload: PasswordPayload) =>
+    request<{ message: string }>("/profile/password", { method: "PUT", body: payload }),
+  remove: (password: string) => request<void>("/profile", { method: "DELETE", body: { password } }),
+};
+
+export const savingsApi = {
+  list: () => request<{ goals: SavingsGoal[]; summary: SavingsSummary }>("/savings"),
+  create: (payload: GoalPayload) => request<{ goal: SavingsGoal }>("/savings", { method: "POST", body: payload }),
+  update: (id: string, payload: Partial<GoalPayload>) =>
+    request<{ goal: SavingsGoal }>(`/savings/${id}`, { method: "PATCH", body: payload }),
+  remove: (id: string) => request<void>(`/savings/${id}`, { method: "DELETE" }),
+  contribute: (id: string, amount: number, note: string) =>
+    request<{ goal: SavingsGoal }>(`/savings/${id}/contributions`, { method: "POST", body: { amount, note } }),
+  removeContribution: (id: string, contributionId: string) =>
+    request<{ goal: SavingsGoal }>(`/savings/${id}/contributions/${contributionId}`, { method: "DELETE" }),
 };
