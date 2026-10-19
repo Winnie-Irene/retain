@@ -669,3 +669,15 @@
     opacity: 0;
   }
 }
+
+@media (max-width: 640px) {
+  .modal {
+    align-items: end;
+    padding: 0;
+  }
+
+  .modal__panel {
+    max-height: 92vh;
+    border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+  }
+}

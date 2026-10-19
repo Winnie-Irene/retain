@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Sidebar } from "./Sidebar";
 import { Sun } from "../ornaments/Ornaments";
+import { LoadingLines } from "../ui/Bits";
 
 export function AppLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -46,7 +47,9 @@ export function AppLayout() {
 
       <main className="shell__main" id="main">
         <div className="shell__content">
-          <Outlet />
+          <Suspense fallback={<LoadingLines rows={6} />}>
+            <Outlet />
+          </Suspense>
         </div>
       </main>
     </div>

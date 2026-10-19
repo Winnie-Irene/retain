@@ -1,20 +1,28 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./components/layout/AppLayout";
 import { AdminRoute, GuestRoute, ProtectedRoute } from "./routes/guards";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { RegisterPage } from "./pages/auth/RegisterPage";
-import { DashboardPage } from "./pages/DashboardPage";
-import { ExpensesPage } from "./pages/ExpensesPage";
-import { ExpenseDetailPage } from "./pages/ExpenseDetailPage";
-import { BudgetPage } from "./pages/BudgetPage";
-import { AdminInsightsPage } from "./pages/admin/AdminInsightsPage";
-import { AdminCategoriesPage } from "./pages/admin/AdminCategoriesPage";
+import { FullPageLoader } from "./components/ui/FullPageLoader";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { useAuth } from "./hooks/useAuth";
 import { useAppDispatch } from "./store";
 import { resetFilters } from "./store/filtersSlice";
 import { clearExpenses } from "./store/expensesSlice";
+
+const DashboardPage = lazy(() => import("./pages/DashboardPage").then((module) => ({ default: module.DashboardPage })));
+const ExpensesPage = lazy(() => import("./pages/ExpensesPage").then((module) => ({ default: module.ExpensesPage })));
+const ExpenseDetailPage = lazy(() =>
+  import("./pages/ExpenseDetailPage").then((module) => ({ default: module.ExpenseDetailPage })),
+);
+const BudgetPage = lazy(() => import("./pages/BudgetPage").then((module) => ({ default: module.BudgetPage })));
+const AdminInsightsPage = lazy(() =>
+  import("./pages/admin/AdminInsightsPage").then((module) => ({ default: module.AdminInsightsPage })),
+);
+const AdminCategoriesPage = lazy(() =>
+  import("./pages/admin/AdminCategoriesPage").then((module) => ({ default: module.AdminCategoriesPage })),
+);
 
 export function App() {
   const { status, isAdmin } = useAuth();
@@ -28,31 +36,35 @@ export function App() {
   }, [status, dispatch]);
 
   return (
-    <Routes>
-      <Route element={<GuestRoute />}>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-      </Route>
+    <Suspense fallback={<FullPageLoader />}>
+      <Routes>
+        <Route element={<GuestRoute />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Route>
 
-      <Route element={<ProtectedRoute />}>
-        <Route element={<AppLayout />}>
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/expenses" element={<ExpensesPage />} />
-          <Route path="/expenses/:id" element={<ExpenseDetailPage />} />
-          <Route path="/budget" element={<BudgetPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<AppLayout />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/expenses" element={<ExpensesPage />} />
+            <Route path="/expenses/:id" element={<ExpenseDetailPage />} />
+            <Route path="/budget" element={<BudgetPage />} />
 
-          <Route element={<AdminRoute />}>
-            <Route path="/admin" element={<AdminInsightsPage />} />
-            <Route path="/admin/categories" element={<AdminCategoriesPage />} />
+            <Route element={<AdminRoute />}>
+              <Route path="/admin" element={<AdminInsightsPage />} />
+              <Route path="/admin/categories" element={<AdminCategoriesPage />} />
+            </Route>
           </Route>
         </Route>
-      </Route>
 
-      <Route
-        path="/"
-        element={<Navigate to={status === "authenticated" ? (isAdmin ? "/admin" : "/dashboard") : "/login"} replace />}
-      />
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
+        <Route
+          path="/"
+          element={
+            <Navigate to={status === "authenticated" ? (isAdmin ? "/admin" : "/dashboard") : "/login"} replace />
+          }
+        />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </Suspense>
   );
 }

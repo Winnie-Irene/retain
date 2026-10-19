@@ -1373,3 +1373,44 @@
     content: " expenses";
   }
 }
+
+.not-found {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  text-align: center;
+  background: var(--blush-wash);
+}
+
+.not-found__title {
+  font-size: 4rem;
+  line-height: 1;
+  padding-top: var(--space-3);
+}
+
+.not-found__text {
+  max-width: 40ch;
+  color: var(--ink-soft);
+  margin-bottom: var(--space-3);
+}
+
+.not-found .btn {
+  text-decoration: none;
+}
+
+.not-found__sprig {
+  position: absolute;
+  right: 12%;
+  bottom: 10%;
+  opacity: 0.6;
+}
+
+@media (max-width: 640px) {
+  .not-found__sprig {
+    display: none;
+  }
+}
