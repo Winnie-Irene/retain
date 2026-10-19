@@ -4,6 +4,7 @@ import { Sheet } from "../components/ui/Sheet";
 import { Button } from "../components/ui/Button";
 import { EmptyState, ErrorNote, LoadingLines } from "../components/ui/Bits";
 import { Pagination } from "../components/ui/Pagination";
+import { ExpenseFilters } from "../components/expenses/ExpenseFilters";
 import { ExpenseTable } from "../components/expenses/ExpenseTable";
 import { useAppDispatch, useAppSelector } from "../store";
 import { fetchExpenses } from "../store/expensesSlice";
@@ -37,7 +38,9 @@ export function ExpensesPage() {
             <>
               <span className="num">{formatNumber(pagination.total)}</span>{" "}
               {pagination.total === 1 ? "expense" : "expenses"}
-              {activeCount > 0 ? " match your filters, adding up to " : " recorded, adding up to "}
+              {activeCount > 0
+                ? `${pagination.total === 1 ? " matches" : " match"} your filters, adding up to `
+                : " recorded, adding up to "}
               <strong className="num">{formatMoney(totalAmount)}</strong>.
             </>
           ) : (
@@ -45,6 +48,8 @@ export function ExpensesPage() {
           )
         }
       />
+
+      <ExpenseFilters />
 
       <Sheet flush className={status === "loading" && items.length > 0 ? "is-refreshing" : undefined}>
         {error && (

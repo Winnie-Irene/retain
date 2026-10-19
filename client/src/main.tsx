@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import { Toaster } from "sonner";
 import { store } from "./store";
 import { AuthProvider } from "./context/AuthContext";
+import { CategoriesProvider } from "./context/CategoriesContext";
 import { App } from "./App";
 import "@fontsource/pinyon-script/400.css";
 import "@fontsource/jost/300.css";
@@ -24,18 +25,20 @@ createRoot(container).render(
     <Provider store={store}>
       <BrowserRouter>
         <AuthProvider>
-          <App />
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              style: {
-                fontFamily: "var(--font-sans)",
-                background: "var(--paper)",
-                border: "1px solid var(--rule-strong)",
-                color: "var(--ink)",
-              },
-            }}
-          />
+          <CategoriesProvider>
+            <App />
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                style: {
+                  fontFamily: "var(--font-sans)",
+                  background: "var(--paper)",
+                  border: "1px solid var(--rule-strong)",
+                  color: "var(--ink)",
+                },
+              }}
+            />
+          </CategoriesProvider>
         </AuthProvider>
       </BrowserRouter>
     </Provider>
