@@ -1,5 +1,15 @@
 import { Link, NavLink } from "react-router-dom";
-import { LayoutDashboard, LogOut, PiggyBank, ReceiptText, Settings, Shapes, Sparkles, Sprout } from "lucide-react";
+import {
+  LayoutDashboard,
+  LogOut,
+  PiggyBank,
+  ReceiptText,
+  Settings,
+  Shapes,
+  Sparkles,
+  Sprout,
+  Users,
+} from "lucide-react";
 import type { ReactNode } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { Avatar } from "../ui/Avatar";
@@ -26,6 +36,7 @@ const adminNav: NavItem[] = [
   { to: "/admin/expenses", label: "Expenses", icon: <ReceiptText size={18} /> },
   { to: "/admin/budgets", label: "Budgets", icon: <PiggyBank size={18} /> },
   { to: "/admin/savings", label: "Savings", icon: <Sprout size={18} /> },
+  { to: "/admin/users", label: "Members", icon: <Users size={18} /> },
   { to: "/admin/categories", label: "Categories", icon: <Shapes size={18} /> },
 ];
 
@@ -62,14 +73,8 @@ export function Sidebar({ onNavigate }: SidebarProps) {
       </div>
 
       <nav className="sidebar__nav" aria-label="Main">
-        {isAdmin && (
-          <>
-            <p className="sidebar__group">Admin</p>
-            <ul>{renderLinks(adminNav)}</ul>
-          </>
-        )}
-        <p className="sidebar__group">{isAdmin ? "My money" : "Planner"}</p>
-        <ul>{renderLinks(personalNav)}</ul>
+        <p className="sidebar__group">{isAdmin ? "Admin" : "Planner"}</p>
+        <ul>{renderLinks(isAdmin ? adminNav : personalNav)}</ul>
         <p className="sidebar__group">Account</p>
         <ul>{renderLinks(accountNav)}</ul>
       </nav>

@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./components/layout/AppLayout";
-import { AdminRoute, GuestRoute, ProtectedRoute } from "./routes/guards";
+import { AdminRoute, GuestRoute, MemberRoute, ProtectedRoute } from "./routes/guards";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { RegisterPage } from "./pages/auth/RegisterPage";
 import { FullPageLoader } from "./components/ui/FullPageLoader";
@@ -33,6 +33,9 @@ const AdminBudgetsPage = lazy(() =>
 const AdminSavingsPage = lazy(() =>
   import("./pages/admin/AdminSavingsPage").then((module) => ({ default: module.AdminSavingsPage })),
 );
+const AdminUsersPage = lazy(() =>
+  import("./pages/admin/AdminUsersPage").then((module) => ({ default: module.AdminUsersPage })),
+);
 const AdminCategoriesPage = lazy(() =>
   import("./pages/admin/AdminCategoriesPage").then((module) => ({ default: module.AdminCategoriesPage })),
 );
@@ -58,11 +61,14 @@ export function App() {
 
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/expenses" element={<ExpensesPage />} />
-            <Route path="/expenses/:id" element={<ExpenseDetailPage />} />
-            <Route path="/budget" element={<BudgetPage />} />
-            <Route path="/savings" element={<SavingsPage />} />
+            <Route element={<MemberRoute />}>
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/expenses" element={<ExpensesPage />} />
+              <Route path="/expenses/:id" element={<ExpenseDetailPage />} />
+              <Route path="/budget" element={<BudgetPage />} />
+              <Route path="/savings" element={<SavingsPage />} />
+            </Route>
+
             <Route path="/settings" element={<SettingsPage />} />
 
             <Route element={<AdminRoute />}>
@@ -70,6 +76,7 @@ export function App() {
               <Route path="/admin/expenses" element={<AdminExpensesPage />} />
               <Route path="/admin/budgets" element={<AdminBudgetsPage />} />
               <Route path="/admin/savings" element={<AdminSavingsPage />} />
+              <Route path="/admin/users" element={<AdminUsersPage />} />
               <Route path="/admin/categories" element={<AdminCategoriesPage />} />
             </Route>
           </Route>

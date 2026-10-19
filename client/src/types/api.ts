@@ -136,3 +136,16 @@ export interface AdminSavingsSummary {
   progress: { label: string; count: number }[];
   popular: { name: string; count: number; saved: number }[];
 }
+
+export interface AdminUser extends User {
+  expenseCount: number;
+  expenseTotal: number;
+  goalCount: number;
+  lastActive: string | null;
+}
+
+export interface AdminUserList {
+  items: AdminUser[];
+  pagination: Pagination;
+  counts: { all: number; active: number; suspended: number };
+}

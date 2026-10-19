@@ -52,3 +52,120 @@
     white-space: normal;
   }
 }
+
+
+.member-filters {
+  margin-top: var(--space-3);
+}
+
+.member-filters__count {
+  margin-left: 6px;
+  font-size: var(--text-xs);
+  opacity: 0.7;
+}
+
+.member {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.member__who {
+  display: grid;
+  min-width: 0;
+}
+
+.member__who strong {
+  font-weight: 500;
+}
+
+.member__who small,
+.member__muted small {
+  display: block;
+  color: var(--ink-faint);
+  font-size: var(--text-xs);
+}
+
+.member__muted {
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.ledger--members .ledger__actions-head {
+  width: 160px;
+}
+
+.account-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.account-pill::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.account-pill--active {
+  background: var(--sage-soft);
+  color: #5d6c50;
+}
+
+.account-pill--suspended {
+  background: color-mix(in srgb, var(--danger) 12%, var(--paper));
+  color: var(--danger);
+}
+
+@media (max-width: 760px) {
+  .ledger--members thead {
+    display: none;
+  }
+
+  .ledger--members,
+  .ledger--members tbody,
+  .ledger--members tr,
+  .ledger--members td {
+    display: block;
+    width: 100%;
+  }
+
+  .ledger--members tbody tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .ledger--members tbody tr:nth-child(even) {
+    background: var(--blush-wash);
+  }
+
+  .ledger--members td {
+    border: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  .ledger--members td[data-label="Member"],
+  .ledger--members td[data-label="Activity"],
+  .ledger--members td[data-label="Joined"] {
+    grid-column: 1 / -1;
+  }
+
+  .ledger--members td[data-label="Joined"]::before {
+    content: "Joined ";
+  }
+
+  .ledger--members .ledger__actions {
+    text-align: right;
+  }
+}

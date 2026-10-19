@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ roles }: ProtectedRouteProps) {
-  const { status, hasRole } = useAuth();
+  const { status, hasRole, isAdmin } = useAuth();
   const location = useLocation();
 
   if (status === "checking") return <FullPageLoader />;
@@ -18,7 +18,7 @@ export function ProtectedRoute({ roles }: ProtectedRouteProps) {
   }
 
   if (roles && !hasRole(...roles)) {
-    return <Navigate to="/dashboard" replace state={{ denied: true }} />;
+    return isAdmin ? <Navigate to="/admin" replace /> : <Navigate to="/dashboard" replace state={{ denied: true }} />;
   }
 
   return <Outlet />;
@@ -26,6 +26,10 @@ export function ProtectedRoute({ roles }: ProtectedRouteProps) {
 
 export function AdminRoute() {
   return <ProtectedRoute roles={["admin"]} />;
+}
+
+export function MemberRoute() {
+  return <ProtectedRoute roles={["user"]} />;
 }
 
 export function GuestRoute() {

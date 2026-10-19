@@ -122,7 +122,6 @@ function PreferencesSection({ user, onSaved }: { user: User; onSaved: (user: Use
   const [alertAt, setAlertAt] = useState(String(user.preferences.alertAt));
   const [landingPage, setLandingPage] = useState<LandingPage>(user.preferences.landingPage);
   const [saving, setSaving] = useState(false);
-  const isAdmin = user.role === "admin";
 
   const changed = Number(alertAt) !== user.preferences.alertAt || landingPage !== user.preferences.landingPage;
 
@@ -155,8 +154,7 @@ function PreferencesSection({ user, onSaved }: { user: User; onSaved: (user: Use
           value={landingPage}
           onChange={(event) => setLandingPage(event.target.value as LandingPage)}
           options={LANDING_OPTIONS}
-          disabled={isAdmin}
-          hint={isAdmin ? "Admins always start on Insights." : "The page you land on after signing in."}
+          hint="The page you land on after signing in."
         />
         <div className="settings-actions">
           <Button type="submit" loading={saving} disabled={!changed}>
@@ -334,11 +332,13 @@ export function SettingsPage() {
       <div className="settings-grid">
         <div className="settings-column">
           <ProfileSection key={`${user.name}-${user.email}-${user.avatar.length}`} user={user} onSaved={updateUser} />
-          <PreferencesSection
-            key={`${user.preferences.alertAt}-${user.preferences.landingPage}`}
-            user={user}
-            onSaved={updateUser}
-          />
+          {user.role !== "admin" && (
+            <PreferencesSection
+              key={`${user.preferences.alertAt}-${user.preferences.landingPage}`}
+              user={user}
+              onSaved={updateUser}
+            />
+          )}
         </div>
         <div className="settings-column">
           <PasswordSection />

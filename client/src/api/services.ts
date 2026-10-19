@@ -4,6 +4,7 @@ import type {
   AdminExpenseSummary,
   AdminInsightsResponse,
   AdminSavingsSummary,
+  AdminUserList,
   AuthResponse,
   DashboardResponse,
   DeleteCategoryResponse,
@@ -98,6 +99,12 @@ export const adminApi = {
   expenses: (month: string) => request<AdminExpenseSummary>(`/admin/expenses${toQueryString({ month })}`),
   budgets: (month: string) => request<AdminBudgetSummary>(`/admin/budgets${toQueryString({ month })}`),
   savings: () => request<AdminSavingsSummary>("/admin/savings"),
+  users: (params: Record<string, QueryValue>) => request<AdminUserList>(`/admin/users${toQueryString(params)}`),
+  updateUser: (id: string, payload: { name?: string; email?: string; status?: "active" | "suspended" }) =>
+    request<{ user: User }>(`/admin/users/${id}`, { method: "PATCH", body: payload }),
+  resetPassword: (id: string, newPassword: string) =>
+    request<{ message: string }>(`/admin/users/${id}/password`, { method: "PUT", body: { newPassword } }),
+  deleteUser: (id: string) => request<{ message: string }>(`/admin/users/${id}`, { method: "DELETE" }),
 };
 
 export const profileApi = {

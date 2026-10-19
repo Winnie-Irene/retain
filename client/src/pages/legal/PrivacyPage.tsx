@@ -55,8 +55,10 @@ export function PrivacyPage() {
           </li>
           <li>
             <strong>Admins.</strong> To look after the platform, admins see totals across all users, spending per
-            category, the names and emails of recently joined members, and a short list of recently added expenses
-            (title, amount, category and who added it). They cannot see your password and cannot change your records.
+            category, the name and email of each member with how many expenses and savings goals they have, and a short
+            list of recently added expenses (title, amount, category and who added it). When needed they can correct
+            your name or email, set a temporary password, pause your account or delete it. They never see your password
+            and cannot change your expenses, budgets, goals or notes.
           </li>
           <li>
             <strong>Nobody else.</strong> Your data is not sold, rented or shared with anyone.
