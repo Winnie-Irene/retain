@@ -61,7 +61,7 @@ export function SavingsPage() {
     <>
       <PageHeader
         title="Savings"
-        subtitle="Put a little aside for the things that matter, and watch each jar fill up."
+        subtitle="Put a little aside for the things that matter and watch each jar fill up. Retain keeps the record, your money stays wherever you keep it."
         aside={
           <Button icon={<Plus size={18} />} onClick={() => setEditing(null)}>
             New goal
