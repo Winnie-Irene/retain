@@ -50,6 +50,7 @@ Admins look after the platform rather than keep a personal planner. Their sideba
 - **Platform spending.** For any month: total recorded, number of expenses, active spenders, average per user, spending by category and payment method, the fixed and variable split, a day by day chart and the busiest days of the week.
 - **Platform budgets.** For any month: how many members set a budget, how many are within, approaching or over (each judged by the member's own warning level), the average budget and average percentage used, and a six month chart of budget statuses.
 - **Platform savings.** Number of goals and savers, total saved against total targets, goals reached, money added this month, average progress, goals grouped by progress, and the most common things people save for.
+- **Member management.** Search members by name or email, filter by active or suspended, see how active each one is, correct their name or email, set a temporary password, suspend or reactivate an account, or delete it with all of its records. Suspended members cannot sign in. Admin accounts cannot be changed from here.
 - **Platform insights.** Total registered users, total number and value of expenses recorded, expenses recorded this month, total spending per category, the top 5 most used and bottom 5 least used categories, a six month trend, recently added expenses (with who added them) and recently registered users.
 
 ## Tech stack
@@ -275,6 +276,10 @@ Expense body:
 | GET | `/admin/expenses?month=2026-10` | Admin | Platform spending summary for a month |
 | GET | `/admin/budgets?month=2026-10` | Admin | Budget status counts, averages and a six month status history |
 | GET | `/admin/savings` | Admin | Savings goal totals, progress groups and the most common goals |
+| GET | `/admin/users` | Admin | Members with activity counts. Query: `search`, `role`, `status`, `page`, `limit` |
+| PATCH | `/admin/users/:id` | Admin | Update a member's `name`, `email` or `status` (`active` or `suspended`) |
+| PUT | `/admin/users/:id/password` | Admin | Set a temporary password. Body: `newPassword` |
+| DELETE | `/admin/users/:id` | Admin | Delete a member and all of their records |
 | GET | `/admin/insights` | Admin | Platform totals, spending per category, top and bottom 5 categories, six month trend, recent expenses and new users |
 | GET | `/health` | Public | Health check |
 
